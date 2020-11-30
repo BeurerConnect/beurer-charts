@@ -44,9 +44,9 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
     /// The ````internal```` specifier is to allow subclasses (HorizontalBar) to populate the same array
     internal lazy var accessibilityOrderedElements: [[NSUIAccessibilityElement]] = accessibilityCreateEmptyOrderedElements()
 
-    private class Buffer
+    public class Buffer
     {
-        var rects = [CGRect]()
+        public var rects = [CGRect]()
     }
     
     @objc open weak var dataProvider: BarChartDataProvider?
@@ -60,6 +60,10 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
     
     // [CGRect] per dataset
     private var _buffers = [Buffer]()
+    
+    public func buffer(at index: Int) -> Buffer {
+        _buffers[index]
+    }
     
     open override func initBuffers()
     {
@@ -94,7 +98,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         }
     }
     
-    private func prepareBuffer(dataSet: IBarChartDataSet, index: Int)
+    open func prepareBuffer(dataSet: IBarChartDataSet, index: Int)
     {
         guard
             let dataProvider = dataProvider,

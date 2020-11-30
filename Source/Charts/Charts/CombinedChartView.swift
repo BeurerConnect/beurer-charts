@@ -53,7 +53,7 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
         {
             super.data = newValue
             
-            self.highlighter = CombinedHighlighter(chart: self, barDataProvider: self)
+            self.highlighter = self.makeHighlighter()
             
             (renderer as? CombinedChartRenderer)?.createRenderers()
             renderer?.initBuffers()
@@ -242,5 +242,11 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
             // draw the marker
             marker.draw(context: context, point: pos)
         }
+    }
+    
+    // MARK: - Make
+    
+    open func makeHighlighter() -> IHighlighter {
+        CombinedHighlighter(chart: self, barDataProvider: self)
     }
 }

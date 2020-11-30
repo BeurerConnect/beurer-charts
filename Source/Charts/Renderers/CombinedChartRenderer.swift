@@ -42,47 +42,27 @@ open class CombinedChartRenderer: DataRenderer
         
         guard let chart = chart else { return }
 
-        for order in drawOrder
-        {
-            switch (order)
-            {
-            case .bar:
-                if chart.barData !== nil
-                {
-                    _renderers.append(BarChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
-                }
-                break
-                
-            case .line:
-                if chart.lineData !== nil
-                {
-                    _renderers.append(LineChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
-                }
-                break
-                
-            case .candle:
-                if chart.candleData !== nil
-                {
-                    _renderers.append(CandleStickChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
-                }
-                break
-                
-            case .scatter:
-                if chart.scatterData !== nil
-                {
-                    _renderers.append(ScatterChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
-                }
-                break
-                
-            case .bubble:
-                if chart.bubbleData !== nil
-                {
-                    _renderers.append(BubbleChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler))
-                }
-                break
-            }
+        _renderers = drawOrder.compactMap {
+            self.createRenderer(for: $0, chart: chart)
         }
-
+    }
+    
+    open func createRenderer(for order: CombinedChartView.DrawOrder, chart: CombinedChartView) -> DataRenderer? {
+        
+        switch (order) {
+        case .bar where chart.barData !== nil:
+            return BarChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler)
+        case .line where chart.lineData !== nil:
+            return LineChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler)
+        case .candle where chart.candleData !== nil:
+            return CandleStickChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler)
+        case .scatter where chart.scatterData !== nil:
+            return ScatterChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler)
+        case .bubble where chart.bubbleData !== nil:
+            return BubbleChartRenderer(dataProvider: chart, animator: animator, viewPortHandler: viewPortHandler)
+        default:
+            return nil
+        }
     }
     
     open override func initBuffers()
