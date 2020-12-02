@@ -342,6 +342,12 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         
         context.saveGState()
         
+        if drawBorder {
+            
+            context.setLineWidth(borderWidth)
+            context.setStrokeColor(borderColor.cgColor)
+        }
+        
         // draw the bar shadow before the values
         if dataProvider.isDrawBarShadowEnabled
         {
@@ -408,6 +414,9 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         
         if isSingleColor
         {
+            if !drawBorder {
+                context.setStrokeColor(dataSet.color(atIndex: 0).cgColor)
+            }
             context.setFillColor(dataSet.color(atIndex: 0).cgColor)
         }
 
@@ -433,16 +442,13 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             {
                 // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
+                if !drawBorder {
+                    context.setStrokeColor(dataSet.color(atIndex: j).cgColor)
+                }
             }
             
             context.fill(barRect)
-            
-            if drawBorder
-            {
-                context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(borderWidth)
-                context.stroke(barRect)
-            }
+            context.stroke(barRect)
 
             // Create and append the corresponding accessibility element to accessibilityOrderedElements
             if let chart = dataProvider as? BarChartView
@@ -823,7 +829,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
     }
 
     /// Sets the drawing position of the highlight object based on the given bar-rect.
-    internal func setHighlightDrawPos(highlight high: Highlight, barRect: CGRect)
+    public func setHighlightDrawPos(highlight high: Highlight, barRect: CGRect)
     {
         high.setDraw(x: barRect.midX, y: barRect.origin.y)
     }
