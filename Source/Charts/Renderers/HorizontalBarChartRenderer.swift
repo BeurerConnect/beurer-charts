@@ -65,7 +65,7 @@ open class HorizontalBarChartRenderer: BarChartRenderer
 		}
 	}
 	
-	private func prepareBuffer(dataSet: BarChartDataSetProtocol, index: Int)
+	open override func prepareBuffer(dataSet: BarChartDataSetProtocol, index: Int)
 	{
 		guard let
 				dataProvider = dataProvider,

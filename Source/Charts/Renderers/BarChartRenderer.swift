@@ -84,7 +84,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         }
     }
     
-    private func prepareBuffer(dataSet: BarChartDataSetProtocol, index: Int)
+    open func prepareBuffer(dataSet: BarChartDataSetProtocol, index: Int)
     {
         guard
             let dataProvider = dataProvider,
